@@ -1,0 +1,41 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: block-shell-exec
+  namespace: default
+spec:
+  severity: 5
+  message: "Shell execution blocked in wisecow pod"
+  tags:
+    - shell
+    - defense-in-depth
+
+  selector:
+    matchLabels:
+      app: wisecow
+
+  # The policy action determines what happens when a rule matches.
+  # Usually Block or Audit.
+  action: Block
+
+  file:
+    # Deny access to specific sensitive files
+    matchPaths:
+    - path: /etc/passwd
+    - path: /etc/shadow
+    - path: /etc/hostname
+
+  process:
+    # Deny execution of specific binaries inside the container that are not strictly necessary
+    matchPaths:
+    - path: /bin/bash
+    - path: /bin/sh
+    - path: /usr/bin/apt
+    - path: /usr/bin/apt-get
+    - path: /usr/bin/dpkg
+    - path: /usr/bin/curl
+    - path: /usr/bin/wget
+
+  network:
+    matchProtocols:
+    - protocol: icmp
