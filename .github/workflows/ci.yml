@@ -49,14 +49,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setting up Kubeconfig to access the Kubernetes cluster
-      # This requires KUBECONFIG to be set as a GitHub Secret
-      - name: Set up Kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-          chmod 600 ~/.kube/config
-
+      # Set up a local Kubernetes cluster using Kind for testing the deployment
+      # Or, replace this step if you have a real Kubernetes cluster and KUBECONFIG secret
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.9.0
+        
       # Replace image tag in deployment to use the newly built image
       # The tag 'main' is used by default for the main branch, or you can use SHA
       - name: Deploy to Kubernetes
