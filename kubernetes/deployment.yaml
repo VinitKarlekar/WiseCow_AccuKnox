@@ -18,6 +18,7 @@ spec:
       - name: wisecow
         # Will be replaced by CI/CD pipeline
         image: ghcr.io/nyrahul/wisecow:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4499
         resources:
